@@ -1,23 +1,39 @@
 import logo from './logo.svg';
 import './App.css';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
 
 function App() {
+  const [randomJoke, setRandomJoke] = useState({});
+
+  const getJoke = () => {
+    axios.get('https://v2.jokeapi.dev/joke/Any')
+      .then(res => {
+        setRandomJoke(res.data)
+        console.log(res.data);
+      })
+      .catch(err => console.log(err))
+  };
+
+  useEffect(() => {
+    getJoke()
+  }, []);
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Random Joke!</h1>
+      {
+        randomJoke.setup ?
+          <>
+            <h4>{randomJoke.setup}</h4>
+            <h5>{randomJoke.delivery}</h5>
+          </>
+          :
+          <>
+            <h4>{randomJoke.joke}</h4>
+          </>
+      }
     </div>
   );
 }
